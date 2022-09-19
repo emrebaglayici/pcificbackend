@@ -8,9 +8,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Controllers.Dtos.RoleToUserForm;
+import com.pcific.pcificbackend.Controllers.Dtos.UserCreateDto;
+import com.pcific.pcificbackend.Controllers.Dtos.UserDto;
 import com.pcific.pcificbackend.Entities.Role;
 import com.pcific.pcificbackend.Entities.Users;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
@@ -30,27 +34,27 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@RestController @RequestMapping("/api") @RequiredArgsConstructor
+@RestController @RequestMapping("/api/v1/") @RequiredArgsConstructor
 public class UserController {
     private final IUserService iUserService;
-    @GetMapping("/users")
-    public ResponseEntity<List<Users>> getUsers() {
-        return ResponseEntity.ok().body(iUserService.getUsers());
-    }
 
     @PostMapping("/user/save")
-    public ResponseEntity<Users>saveUser(@RequestBody Users user) {
+    public ResponseEntity<Users>saveUser(@RequestBody UserCreateDto user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
         return ResponseEntity.created(uri).body(iUserService.saveUser(user));
     }
 
-    @PostMapping("/role/save")
-    public ResponseEntity<Role>saveRole(@RequestBody Role role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(iUserService.saveRole(role));
+    @GetMapping("/users")
+    public Page<UserDto> listUsers(Pageable pageable){
+        return  iUserService.listUsers(pageable)
+                .map(user->UserDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .username(user.getUsername())
+                        .roles(user.getRoles())
+                        .build());
     }
-
-    @PostMapping("/role/addtouser")
+    @PostMapping("/role/addRoleToUser")
     public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
         iUserService.addRoleToUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().build();
