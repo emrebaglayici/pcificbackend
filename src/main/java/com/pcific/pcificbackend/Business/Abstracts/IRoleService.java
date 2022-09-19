@@ -6,4 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface IRoleService {
     Page<Role> listRoles(Pageable pageable);
+
 }
