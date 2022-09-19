@@ -8,9 +8,12 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Controllers.Dtos.RoleToUserForm;
+import com.pcific.pcificbackend.Controllers.Dtos.UserDto;
 import com.pcific.pcificbackend.Entities.Role;
 import com.pcific.pcificbackend.Entities.Users;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
@@ -33,9 +36,15 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RestController @RequestMapping("/api") @RequiredArgsConstructor
 public class UserController {
     private final IUserService iUserService;
+
     @GetMapping("/users")
-    public ResponseEntity<List<Users>> getUsers() {
-        return ResponseEntity.ok().body(iUserService.getUsers());
+    public Page<UserDto> listUsers(Pageable pageable){
+        return  iUserService.listUsers(pageable)
+                .map(user->UserDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .roles(user.getRoles())
+                        .build());
     }
 
     @PostMapping("/user/save")
