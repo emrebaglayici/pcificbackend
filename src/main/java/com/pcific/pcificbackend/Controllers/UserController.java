@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
+
 @RestController @RequestMapping("/api/v1/") @RequiredArgsConstructor
 public class UserController {
     private final IUserService iUserService;
