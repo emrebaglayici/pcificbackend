@@ -15,8 +15,12 @@ import java.util.Set;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private IUserService userService;
+
+    private final IUserService userService;
+
+    public CustomUserDetailsService(IUserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
