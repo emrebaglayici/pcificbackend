@@ -1,18 +1,11 @@
 package com.pcific.pcificbackend.Repositories;
-
-import com.pcific.pcificbackend.Entities.Role;
 import com.pcific.pcificbackend.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByEmail(String email);
 
-public interface UserRepository extends JpaRepository<User,Long> {
-    Optional<User> findByUsername(String username);
+    @Override
+    void delete(User user);
 
-    @Modifying
-    @Query("update User set role = :role where username = :username")
-    void updateUserRole(@Param("username") String username, @Param("role") Role role);
 }

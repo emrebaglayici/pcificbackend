@@ -9,21 +9,22 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-public class Role {
+public class Privilege {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
-    @ManyToMany
-    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-    private Collection<Privilege> privileges;
     private String name;
-    public Role() {
+
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles;
+
+    public Privilege() {
         super();
     }
-    public Role(final String name) {
+
+    public Privilege(final String name) {
         super();
         this.name = name;
     }
@@ -37,25 +38,24 @@ public class Role {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
             return false;
-        }
-        final Role role = (Role) obj;
-        if (!getName().equals(role.getName())) {
+        Privilege other = (Privilege) obj;
+        if (getName() == null) {
+            if (other.getName() != null)
+                return false;
+        } else if (!getName().equals(other.getName()))
             return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Role [name=" + name + "]" + "[id=" + id + "]";
+        return "Privilege [name=" + name + "]" + "[id=" + id + "]";
     }
 }
