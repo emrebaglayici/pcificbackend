@@ -6,17 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 
-@Setter
+@Setter @Getter
 public class ProductCreateDto {
 
     private String name;
     private Double price;
     private String shortDescription;
     private String longDescription;
-//    private List<Long> tagsList;
-//    private List<Tags> tags;
+    private List<Long> tagsList;
+    private Set<Long> tags;
 //    private Set<Size> sizes;
 //    private Category category;
 

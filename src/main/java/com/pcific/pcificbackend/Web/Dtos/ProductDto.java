@@ -14,7 +14,7 @@ public class ProductDto {
     private Double price;
     private String shortDescription;
     private String longDescription;
-    private CategoryDto category;
+//    private CategoryDto category;
     private List<TagsDto> tags;
-    private Set<SizeDto> sizes;
+//    private Set<SizeDto> sizes;
 }
