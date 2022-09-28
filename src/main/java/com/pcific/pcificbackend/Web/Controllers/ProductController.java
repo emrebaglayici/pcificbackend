@@ -6,11 +6,9 @@ import com.pcific.pcificbackend.Entities.Product;
 import com.pcific.pcificbackend.Web.Dtos.ProductCreateDto;
 import com.pcific.pcificbackend.Web.Dtos.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -37,15 +35,9 @@ public class ProductController {
 //
 //    }
     @PostMapping("product")
-    public ProductDto create(@RequestBody ProductCreateDto dto){
-        Product product=iProductService.saveProduct(dto.toProduct());
-        return ProductDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .shortDescription(product.getShortDescription())
-                .longDescription(product.getLongDescription())
-                .build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody ProductCreateDto dto){
+        iProductService.saveProduct(dto);
     }
 
     public Set<Image> uploadImage(MultipartFile[] multipartFiles) throws IOException {

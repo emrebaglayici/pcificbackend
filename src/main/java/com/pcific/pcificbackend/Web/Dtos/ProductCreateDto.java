@@ -1,12 +1,10 @@
 package com.pcific.pcificbackend.Web.Dtos;
 
-import com.pcific.pcificbackend.Entities.Product;
-import com.pcific.pcificbackend.Entities.Tags;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 
 @Setter @Getter
@@ -16,18 +14,7 @@ public class ProductCreateDto {
     private Double price;
     private String shortDescription;
     private String longDescription;
-    private List<Long> tagsList;
-    private Set<Long> tags;
-//    private Set<Size> sizes;
-//    private Category category;
-
-    public Product toProduct(){
-        return Product.builder()
-                .name(this.name)
-                .price(this.price)
-                .shortDescription(this.shortDescription)
-                .longDescription(this.longDescription)
-
-                .build();
-    }
+    private List<Long> tags;
+    private List<Long> categories;
+    private List<SizeCreateDto> sizes;
 }

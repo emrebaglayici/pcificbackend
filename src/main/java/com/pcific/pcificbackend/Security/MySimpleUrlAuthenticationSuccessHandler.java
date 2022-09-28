@@ -90,13 +90,14 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
              	username = authentication.getName();
              }
 
-            return "/homepage.html?user="+username;
+            return "/swagger-ui/index.html";
         } else if (isAdmin) {
-            return "/console";
+            return "/swagger-ui/index.html";
         } else {
             throw new IllegalStateException();
         }
     }
+    //swagger settings
 
     protected void clearAuthenticationAttributes(final HttpServletRequest request) {
         final HttpSession session = request.getSession(false);
