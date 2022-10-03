@@ -5,13 +5,11 @@ import com.pcific.pcificbackend.Entities.Product;
 import com.pcific.pcificbackend.Entities.Size;
 import com.pcific.pcificbackend.Entities.Tags;
 import com.pcific.pcificbackend.Repositories.ProductRepository;
-import com.pcific.pcificbackend.Repositories.SizeRepository;
 import com.pcific.pcificbackend.Web.Dtos.ProductCreateDto;
-import com.pcific.pcificbackend.Web.Dtos.SizeCreateDto;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,26 +49,34 @@ public class ProductManager implements IProductService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        List<Size> sizes=dto.getSizes().stream()
-                .map(id->sizeManager.getById(id.getId()))
+        List<Size> sizes = dto.getSizes().stream()
+                .map(id -> sizeManager.getById(id))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        if (categories.size()!=dto.getCategories().size()){
+        if (categories.size() != dto.getCategories().size()) {
             log.error("Categories are not found");
             //TODO: add exception here
         }
         productRepository.save(
-                Product.builder().tags(tags)
-                        .category(categories)
+                Product.builder()
                         .name(dto.getName())
                         .price(dto.getPrice())
                         .shortDescription(dto.getShortDescription())
                         .longDescription(dto.getLongDescription())
+                        .quantity(dto.getQuantity())
+                        .active(dto.getActive())
+                        .category(categories)
+                        .tags(tags)
                         .sizes(sizes)
                         .build()
 
         );
+    }
+
+    @Override
+    public Page<Product> listProducts(Pageable pageable) {
+        return this.productRepository.findAllByActiveTrue(pageable);
     }
 }

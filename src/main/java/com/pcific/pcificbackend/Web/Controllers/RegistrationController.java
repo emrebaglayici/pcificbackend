@@ -151,7 +151,4 @@ public class RegistrationController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
-
-
 }

@@ -1,7 +1,10 @@
 package com.pcific.pcificbackend.Web.Dtos;
 
 import com.pcific.pcificbackend.Validation.ValidPassword;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class PasswordDto {
 
     private String oldPassword;
@@ -10,29 +13,4 @@ public class PasswordDto {
 
     @ValidPassword
     private String newPassword;
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }

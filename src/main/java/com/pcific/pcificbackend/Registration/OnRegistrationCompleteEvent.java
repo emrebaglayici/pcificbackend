@@ -1,11 +1,12 @@
 package com.pcific.pcificbackend.Registration;
 
 import com.pcific.pcificbackend.Entities.User;
+import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.Locale;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("serial") @Getter
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
     private final String appUrl;
@@ -18,19 +19,4 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
         this.locale = locale;
         this.appUrl = appUrl;
     }
-
-    //
-
-    public String getAppUrl() {
-        return appUrl;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
 }

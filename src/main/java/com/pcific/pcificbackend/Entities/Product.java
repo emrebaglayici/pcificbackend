@@ -18,26 +18,13 @@ public class Product {
     private Double price;
     private String shortDescription;
     private String longDescription;
-
-//    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-//    @JoinTable(name = "product_images",
-//    joinColumns = {
-//            @JoinColumn(name = "product_id")
-//    },
-//            inverseJoinColumns = {
-//            @JoinColumn(name ="image_id" )
-//            }
-//    )
-//    private Set<Image> productImages;
-
-//
-//    @OneToMany(mappedBy = "product")
-//    private Set<Size> size;
+    private Boolean active;
+    private Integer quantity;
 
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "product_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "size_id",referencedColumnName = "id")
+            inverseJoinColumns = @JoinColumn(name = "sizes_id",referencedColumnName = "id")
     )
     private List<Size> sizes;
 

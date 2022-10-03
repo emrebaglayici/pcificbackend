@@ -1,0 +1,7 @@
+package com.pcific.pcificbackend.Repositories;
+
+import com.pcific.pcificbackend.Entities.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category,Long> {
+}

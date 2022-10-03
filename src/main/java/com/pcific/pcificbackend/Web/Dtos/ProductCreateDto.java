@@ -2,9 +2,7 @@ package com.pcific.pcificbackend.Web.Dtos;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
-import java.util.Map;
 
 
 @Setter @Getter
@@ -14,7 +12,9 @@ public class ProductCreateDto {
     private Double price;
     private String shortDescription;
     private String longDescription;
+    private Boolean active;
+    private Integer quantity;
     private List<Long> tags;
     private List<Long> categories;
-    private List<SizeCreateDto> sizes;
+    private List<Long> sizes;
 }

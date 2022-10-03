@@ -61,7 +61,6 @@ public class RegistrationRestController {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.registerNewUserAccount(accountDto);
-//        userService.addUserLocation(registered, getClientIP(request));
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
         return new GenericResponse("success");
     }
@@ -84,7 +83,6 @@ public class RegistrationRestController {
             userService.createPasswordResetTokenForUser(user, token);
             mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
         }
-        System.out.println("success");
 //        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }
 
