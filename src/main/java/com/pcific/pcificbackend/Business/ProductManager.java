@@ -4,6 +4,9 @@ import com.pcific.pcificbackend.Entities.Category;
 import com.pcific.pcificbackend.Entities.Product;
 import com.pcific.pcificbackend.Entities.Size;
 import com.pcific.pcificbackend.Entities.Tags;
+import com.pcific.pcificbackend.Exceptions.FillTheBlanksException;
+import com.pcific.pcificbackend.Exceptions.MustBeGraterThanZero;
+import com.pcific.pcificbackend.Exceptions.NotFoundException;
 import com.pcific.pcificbackend.Repositories.ProductRepository;
 import com.pcific.pcificbackend.Web.Dtos.ProductCreateDto;
 import lombok.extern.slf4j.Slf4j;
@@ -34,15 +37,21 @@ public class ProductManager implements IProductService {
 
     @Override
     public void saveProduct(ProductCreateDto dto) {
+        if (dto.getPrice()<0)
+            throw new MustBeGraterThanZero("Price must be grater than zero!");
+        if (dto.getQuantity()<0)
+            throw new MustBeGraterThanZero("Quantity must be grater than zero!");
+        if (dto.getName().isEmpty())
+            throw new FillTheBlanksException("Name cannot be empty");
+
         List<Tags> tags = dto.getTags().stream()
                 .map(id -> tagManager.getById(id))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-        if (tags.size() != dto.getTags().size()) {
-            log.error("Tags are not found");
-            //TODO: add exception here
-        }
+        if (tags.size() != dto.getTags().size())
+            throw new NotFoundException("Tags are not found");
+
         List<Category> categories = dto.getCategories().stream()
                 .map(id -> categoryManager.getById(id))
                 .filter(Optional::isPresent)
@@ -55,10 +64,8 @@ public class ProductManager implements IProductService {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        if (categories.size() != dto.getCategories().size()) {
-            log.error("Categories are not found");
-            //TODO: add exception here
-        }
+        if (categories.size() != dto.getCategories().size())
+            throw new NotFoundException("Categories are not found");
         productRepository.save(
                 Product.builder()
                         .name(dto.getName())
@@ -71,7 +78,6 @@ public class ProductManager implements IProductService {
                         .tags(tags)
                         .sizes(sizes)
                         .build()
-
         );
     }
 
