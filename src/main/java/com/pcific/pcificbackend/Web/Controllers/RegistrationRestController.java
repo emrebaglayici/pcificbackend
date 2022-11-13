@@ -1,6 +1,6 @@
 package com.pcific.pcificbackend.Web.Controllers;
 
-import com.pcific.pcificbackend.Business.IUserService;
+import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Entities.VerificationToken;
 import com.pcific.pcificbackend.Registration.OnRegistrationCompleteEvent;
@@ -81,9 +81,8 @@ public class RegistrationRestController {
         if (user != null) {
             final String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
-            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
+            mailSender.send(constructResetTokenEmail(getAppUrl(request), token, user));
         }
-//        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }
 
     // Save password
@@ -116,15 +115,13 @@ public class RegistrationRestController {
         return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
     }
 
-    // ============== NON-API ============
-
     private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {
         final String confirmationUrl = contextPath + "/registrationConfirm.html?token=" + newToken.getToken();
         final String message = messages.getMessage("message.resendToken", null, locale);
         return constructEmail("Resend Registration Token", message + " \r\n" + confirmationUrl, user);
     }
 
-    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final String token, final User user) {
         final String url = contextPath + "/user/changePassword?token=" + token;
         final String message = messages.getMessage("message.resetPassword", null, Locale.ENGLISH);
         return constructEmail("Reset Password", message + " \r\n" + url, user);
@@ -141,13 +138,5 @@ public class RegistrationRestController {
 
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
-
-    private String getClientIP(HttpServletRequest request) {
-        final String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
     }
 }

@@ -1,12 +1,10 @@
 package com.pcific.pcificbackend.Web.Controllers;
 
-import com.pcific.pcificbackend.Business.IUserService;
+import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Entities.Privilege;
 import com.pcific.pcificbackend.Entities.Role;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Security.ISecurityUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -30,9 +27,6 @@ import java.util.stream.Collectors;
 
 @Controller
 public class RegistrationController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private IUserService userService;
 
@@ -47,7 +41,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/registrationConfirm")
-    public ModelAndView confirmRegistration(final HttpServletRequest request, final ModelMap model, @RequestParam("token") final String token) throws UnsupportedEncodingException {
+    public ModelAndView confirmRegistration(final ModelMap model, @RequestParam("token") final String token){
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid")) {
             final User user = userService.getUser(token);
@@ -55,7 +49,6 @@ public class RegistrationController {
             model.addAttribute("messageKey", "message.accountVerified");
             return new ModelAndView("redirect:/console", model);
         }
-
         model.addAttribute("messageKey", "auth.message." + result);
         model.addAttribute("expired", "expired".equals(result));
         model.addAttribute("token", token);
@@ -64,37 +57,31 @@ public class RegistrationController {
 
     @GetMapping("/console")
     public ModelAndView console(final HttpServletRequest request, final ModelMap model, @RequestParam("messageKey") final Optional<String> messageKey) {
-
         Locale locale = request.getLocale();
         messageKey.ifPresent( key -> {
                     String message = messages.getMessage(key, null, locale);
                     model.addAttribute("message", message);
                 }
         );
-
         return new ModelAndView("console", model);
     }
 
     @GetMapping("/badUser")
     public ModelAndView badUser(final HttpServletRequest request, final ModelMap model, @RequestParam("messageKey" ) final Optional<String> messageKey, @RequestParam("expired" ) final Optional<String> expired, @RequestParam("token" ) final Optional<String> token) {
-
         Locale locale = request.getLocale();
         messageKey.ifPresent( key -> {
                     String message = messages.getMessage(key, null, locale);
                     model.addAttribute("message", message);
                 }
         );
-
         expired.ifPresent( e -> model.addAttribute("expired", e));
         token.ifPresent( t -> model.addAttribute("token", t));
-
         return new ModelAndView("badUser", model);
     }
 
     @GetMapping("/user/changePassword")
     public ModelAndView showChangePasswordPage(final ModelMap model, @RequestParam("token") final String token) {
         final String result = securityUserService.validatePasswordResetToken(token);
-
         if(result != null) {
             String messageKey = "auth.message." + result;
             model.addAttribute("messageKey", messageKey);
@@ -114,7 +101,6 @@ public class RegistrationController {
                     model.addAttribute("message", message);
                 }
         );
-
         return new ModelAndView("updatePassword", model);
     }
 
@@ -127,13 +113,9 @@ public class RegistrationController {
                     model.addAttribute("message", message);
                 }
         );
-
         error.ifPresent( e ->  model.addAttribute("error", e));
-
         return new ModelAndView("login", model);
     }
-
-    // ============== NON-API ============
 
     public void authWithoutPassword(User user) {
 
@@ -141,8 +123,7 @@ public class RegistrationController {
                 .stream()
                 .map(Role::getPrivileges)
                 .flatMap(Collection::stream)
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().toList();
 
         List<GrantedAuthority> authorities = privileges.stream()
                 .map(p -> new SimpleGrantedAuthority(p.getName()))

@@ -1,11 +1,9 @@
 package com.pcific.pcificbackend.Security;
 
-import com.pcific.pcificbackend.Business.DeviceService;
 import com.pcific.pcificbackend.Entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -28,13 +26,6 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
     @Autowired
     ActiveUserStore activeUserStore;
-
-    @Autowired
-    private DeviceService deviceService;
-
-    @Autowired
-    private Environment env;
-
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
         handle(request, response, authentication);
@@ -55,9 +46,6 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         clearAuthenticationAttributes(request);
 
     }
-
-
-
     protected void handle(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
         final String targetUrl = determineTargetUrl(authentication);
 
@@ -107,15 +95,4 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
-
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
-
-    private boolean isGeoIpLibEnabled() {
-        return Boolean.parseBoolean(env.getProperty("geo.ip.lib.enabled"));
-    }
 }

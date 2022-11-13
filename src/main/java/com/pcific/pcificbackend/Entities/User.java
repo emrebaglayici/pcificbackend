@@ -4,7 +4,6 @@ import lombok.*;
 import org.jboss.aerogear.security.otp.api.Base32;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -22,8 +21,6 @@ public class User {
     @Column(length = 60)
     private String password;
     private boolean enabled;
-
-    private boolean isUsing2FA;
     private String secret;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -71,7 +68,6 @@ public class User {
                 ", lastName=" + lastName +
                 ", email=" + email +
                 ", enabled=" + enabled +
-                ", isUsing2FA=" + isUsing2FA +
                 ", secret=" + secret +
                 ", roles=" + roles +
                 "]";

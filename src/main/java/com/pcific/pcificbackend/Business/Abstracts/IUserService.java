@@ -1,15 +1,17 @@
-package com.pcific.pcificbackend.Business;
+package com.pcific.pcificbackend.Business.Abstracts;
 
 import com.pcific.pcificbackend.Entities.PasswordResetToken;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Entities.VerificationToken;
 import com.pcific.pcificbackend.Web.Dtos.UserDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
-
+    Page<User> listCustomers(Pageable pageable);
     User registerNewUserAccount(UserDto accountDto);
 
     User getUser(String verificationToken);

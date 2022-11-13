@@ -1,4 +1,4 @@
-package com.pcific.pcificbackend.Web.Dtos;
+package com.pcific.pcificbackend.Web.Dtos.ProductDto;
 
 import lombok.Getter;
 import lombok.Setter;

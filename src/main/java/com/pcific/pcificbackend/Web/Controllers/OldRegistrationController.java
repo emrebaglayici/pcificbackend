@@ -1,6 +1,6 @@
 package com.pcific.pcificbackend.Web.Controllers;
 
-import com.pcific.pcificbackend.Business.IUserService;
+import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Entities.PasswordResetToken;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Entities.VerificationToken;

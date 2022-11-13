@@ -66,12 +66,4 @@ public class MyCustomLoginAuthenticationSuccessHandler implements Authentication
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
-
-    public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
-
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
 }

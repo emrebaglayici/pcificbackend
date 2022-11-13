@@ -24,10 +24,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public RestResponseEntityExceptionHandler() {
         super();
     }
-
-    // API
-
-    // 400
     @Override
     protected ResponseEntity<Object> handleBindException(final BindException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
         logger.error("400 Status Code", ex);

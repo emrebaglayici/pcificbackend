@@ -1,5 +1,6 @@
-package com.pcific.pcificbackend.Business;
+package com.pcific.pcificbackend.Business.Concretes;
 
+import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Entities.PasswordResetToken;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Entities.VerificationToken;
@@ -11,6 +12,8 @@ import com.pcific.pcificbackend.Web.Dtos.UserDto;
 import com.pcific.pcificbackend.Web.Error.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,15 +44,16 @@ public class UserService implements IUserService {
     @Autowired
     private SessionRegistry sessionRegistry;
 
-
-    @Autowired
-    private Environment env;
-
     public static final String TOKEN_INVALID = "invalidToken";
     public static final String TOKEN_EXPIRED = "expired";
     public static final String TOKEN_VALID = "valid";
 
     // API
+
+    @Override
+    public Page<User> listCustomers(Pageable pageable) {
+        return this.userRepository.findAll(pageable);
+    }
 
     @Override
     public User registerNewUserAccount(final UserDto accountDto) {

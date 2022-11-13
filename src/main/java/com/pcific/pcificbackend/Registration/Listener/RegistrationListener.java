@@ -1,6 +1,6 @@
 package com.pcific.pcificbackend.Registration.Listener;
 
-import com.pcific.pcificbackend.Business.IUserService;
+import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Registration.OnRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
-package com.pcific.pcificbackend.Business;
+package com.pcific.pcificbackend.Business.Concretes;
 
+import com.pcific.pcificbackend.Business.Abstracts.IProductService;
 import com.pcific.pcificbackend.Entities.Category;
 import com.pcific.pcificbackend.Entities.Product;
 import com.pcific.pcificbackend.Entities.Size;
@@ -8,7 +9,7 @@ import com.pcific.pcificbackend.Exceptions.FillTheBlanksException;
 import com.pcific.pcificbackend.Exceptions.MustBeGraterThanZero;
 import com.pcific.pcificbackend.Exceptions.NotFoundException;
 import com.pcific.pcificbackend.Repositories.ProductRepository;
-import com.pcific.pcificbackend.Web.Dtos.ProductCreateDto;
+import com.pcific.pcificbackend.Web.Dtos.ProductDto.ProductCreateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,11 @@ public class ProductManager implements IProductService {
 
     @Autowired
     private SizeManager sizeManager;
+
+    @Override
+    public Optional<Product> getById(Long id) {
+        return productRepository.findById(id);
+    }
 
     @Override
     public void saveProduct(ProductCreateDto dto) {
@@ -85,4 +91,18 @@ public class ProductManager implements IProductService {
     public Page<Product> listProducts(Pageable pageable) {
         return this.productRepository.findAllByActiveTrue(pageable);
     }
+
+    @Override
+    public Product deleteById(Long id) {
+        Optional<Product> optionalProduct=productRepository.findById(id);
+        Product product=optionalProduct.orElseThrow(()->new NotFoundException("Product Not Found"));
+        this.productRepository.deleteById(product.getId());
+        return product;
+    }
+
+    @Override
+    public void update(Long id, Product product) {
+        this.productRepository.save(product);
+    }
+
 }

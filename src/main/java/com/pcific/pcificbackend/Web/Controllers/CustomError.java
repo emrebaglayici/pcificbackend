@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data @Builder
-public class CustomerError {
+public class CustomError {
     private LocalDateTime timeStamp;
     private int status;
     private String error;
