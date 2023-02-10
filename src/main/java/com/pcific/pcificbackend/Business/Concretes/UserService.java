@@ -2,6 +2,7 @@ package com.pcific.pcificbackend.Business.Concretes;
 
 import com.pcific.pcificbackend.Business.Abstracts.IUserService;
 import com.pcific.pcificbackend.Entities.PasswordResetToken;
+import com.pcific.pcificbackend.Entities.Role;
 import com.pcific.pcificbackend.Entities.User;
 import com.pcific.pcificbackend.Entities.VerificationToken;
 import com.pcific.pcificbackend.Repositories.PasswordResetTokenRepository;
@@ -50,10 +51,7 @@ public class UserService implements IUserService {
 
     // API
 
-    @Override
-    public Page<User> listCustomers(Pageable pageable) {
-        return this.userRepository.findAll(pageable);
-    }
+
 
     @Override
     public User registerNewUserAccount(final UserDto accountDto) {
@@ -67,6 +65,7 @@ public class UserService implements IUserService {
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        user.setRoleName("ROLE_USER");
         return userRepository.save(user);
     }
 

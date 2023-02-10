@@ -1,5 +1,7 @@
 package com.pcific.pcificbackend.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.jboss.aerogear.security.otp.api.Base32;
 
@@ -10,6 +12,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Table(name = "user_account")
+@Builder  @AllArgsConstructor
 public class User {
     @Id
     @Column(unique = true, nullable = false)
@@ -26,6 +29,9 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+
+
+    private String roleName;
 
     public User() {
         super();

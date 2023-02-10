@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
-    Page<User> listCustomers(Pageable pageable);
+
     User registerNewUserAccount(UserDto accountDto);
 
     User getUser(String verificationToken);
